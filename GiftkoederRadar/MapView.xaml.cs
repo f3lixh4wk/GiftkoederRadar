@@ -23,17 +23,12 @@ namespace GiftkoederRadar
 	/// </summary>
 	public partial class MapView : Page
 	{
-		public MapView(bool showProgressDialog)
+		public MapView(bool showProgress)
 		{
 			InitializeComponent();
+			showProgressDialog = showProgress;
 			tboxSearch.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxSearch.GotFocus += new RoutedEventHandler(textbox_enter);
-			if(showProgressDialog)
-			{
-				// Background Worker start mit Progressbar und Timer(eigener Dialog)
-				// Der Dialog macht nix, er kommt jedes mal wenn eine Meldung erstellt wird
-				// Reports aus dem MainWindow laden
-			}
 		}
 
 		private void btnClick(object sender, RoutedEventArgs e)
@@ -106,6 +101,21 @@ namespace GiftkoederRadar
 			mapView.MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter;
 			mapView.CanDragMap = true;
 			mapView.DragButton = MouseButton.Left;
+
+			if (showProgressDialog)
+			{
+				// Background Worker start mit Progressbar und Timer(eigener Dialog)
+				// Der Dialog macht nix, er kommt jedes mal wenn eine Meldung erstellt wird
+				// Reports aus dem MainWindow laden
+				ProgressDialogWithTimer progressDialogWithTimer = new ProgressDialogWithTimer(5);
+				progressDialogWithTimer.Owner = (MainWindow)Application.Current.MainWindow;
+				progressDialogWithTimer.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+				Opacity = 0.5;
+				progressDialogWithTimer.ShowDialog();
+				Opacity = 1;
+			}
 		}
+
+		bool showProgressDialog = false;
 	}
 }

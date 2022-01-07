@@ -16,6 +16,9 @@
     <Compile Update="MapView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="ProgressDialogWithTimer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ReportView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +37,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MapView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ProgressDialogWithTimer.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ReportView.xaml">
