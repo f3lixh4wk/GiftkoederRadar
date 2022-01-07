@@ -112,7 +112,8 @@ namespace GiftkoederRadar
 				{
 					MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 					mainWindow.SetActiveView(View.MapView);
-					mainWindow.ChangeView(new MapView());
+					bool showProgressDialog = false;
+					mainWindow.ChangeView(new MapView(showProgressDialog));
 				}
 			}
 			else if (btn == btnOpenSketch)
@@ -181,7 +182,8 @@ namespace GiftkoederRadar
 					report.ReportId = mainWindow.GetNextFreeReportId();
 					mainWindow.AddReport(report);
 					mainWindow.SetActiveView(View.MapView);
-					mainWindow.ChangeView(new MapView());
+					bool showProgressDialog = true;
+					mainWindow.ChangeView(new MapView(showProgressDialog));
 				}
 			}
 		}
@@ -189,7 +191,16 @@ namespace GiftkoederRadar
 		// Wirft Exception sobald ein Pflichtfeld nicht ausgefüllt wurde
 		private void validateReport()
 		{
-
+			if (report.Country.Length == 0)
+				throw new Exception("Es muss ein Land ausgewählt werden!");
+			if (report.PostCode.Length == 0 || report.PostCode == Report.InitialPostCode)
+				throw new Exception("Es muss eine Postleitzahl angegeben werden!");
+			if(report.Town.Length == 0 || report.Town == Report.InitialTown)
+				throw new Exception("Es muss eine Stadt angegeben werden!");
+			if(report.BaitTitle.Length == 0 || report.BaitTitle == Report.InitialBaitTitle)
+				throw new Exception("Es muss eine Giftköder-Beschreibung angegeben werden!");
+			if(report.Description.Length == 0)
+				throw new Exception("Es muss angegeben werden, was passiert ist!");
 		}
 
 		void updateMandatoryIndicator(StackPanel stackPanel, string text, string initialText)

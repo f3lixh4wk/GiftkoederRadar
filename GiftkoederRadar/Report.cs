@@ -141,7 +141,7 @@ namespace GiftkoederRadar
 
 		public string Description
 		{
-			get { return country; }
+			get { return description; }
 			set
 			{
 				if (value.Equals(description))

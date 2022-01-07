@@ -23,11 +23,17 @@ namespace GiftkoederRadar
 	/// </summary>
 	public partial class MapView : Page
 	{
-		public MapView()
+		public MapView(bool showProgressDialog)
 		{
 			InitializeComponent();
 			tboxSearch.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxSearch.GotFocus += new RoutedEventHandler(textbox_enter);
+			if(showProgressDialog)
+			{
+				// Background Worker start mit Progressbar und Timer(eigener Dialog)
+				// Der Dialog macht nix, er kommt jedes mal wenn eine Meldung erstellt wird
+				// Reports aus dem MainWindow laden
+			}
 		}
 
 		private void btnClick(object sender, RoutedEventArgs e)

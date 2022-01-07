@@ -32,7 +32,8 @@ namespace GiftkoederRadar
 			{
 				MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 				mainWindow.SetActiveView(View.MapView);
-				mainWindow.ChangeView(new MapView());
+				bool showProgressDialog = false;
+				mainWindow.ChangeView(new MapView(showProgressDialog));
 			}
 			else if (btn == btnGiftKoederMelden)
 			{
