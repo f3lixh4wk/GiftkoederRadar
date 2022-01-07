@@ -1,3 +1,4 @@
 
 .vs/GiftkoederRadar/DesignTimeBuild
-.vs/GiftkoederRadar/v16/.suo
+*.suo
+*.cache
