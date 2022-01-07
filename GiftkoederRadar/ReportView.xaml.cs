@@ -28,14 +28,44 @@ namespace GiftkoederRadar
 
 			SizeChanged += new SizeChangedEventHandler(pageWillResize);
 			tboxPostCode.GotFocus += new RoutedEventHandler(textbox_enter);
+			tboxPostCode.TextChanged += new TextChangedEventHandler(textbox_textChanged);
 			tboxTown.GotFocus += new RoutedEventHandler(textbox_enter);
+			tboxTown.TextChanged += new TextChangedEventHandler(textbox_textChanged);
 			tboxStreet.GotFocus += new RoutedEventHandler(textbox_enter);
 			tboxBaitTitle.GotFocus += new RoutedEventHandler(textbox_enter);
+			tboxBaitTitle.TextChanged += new TextChangedEventHandler(textbox_textChanged);
+			tboxDescription.TextChanged += new TextChangedEventHandler(textbox_textChanged);
 
 			//2.3.5.DataBinding: das DataContext-Attribut, die Binding-Syntax (Ganze Vorlesung 9.Data Binding)
 			report = new Report();
 			DataContext = report;
 			calledFromView = callingView;
+		}
+
+		private void textbox_textChanged(object sender, EventArgs e)
+		{
+			// Den Pflichtfeldindikator * überprüfen
+			TextBox tbox = (TextBox)sender;
+			if (tbox == tboxPostCode)
+			{
+				StackPanel stackPanel = (StackPanel)lblPostCode.Content;
+				updateMandatoryIndicator(stackPanel, tbox.Text, Report.InitialPostCode);
+			}
+			else if(tbox == tboxTown)
+			{
+				StackPanel stackPanel = (StackPanel)lblTown.Content;
+				updateMandatoryIndicator(stackPanel, tbox.Text, Report.InitialTown);
+			}
+			else if (tbox == tboxBaitTitle)
+			{
+				StackPanel stackPanel = (StackPanel)lblBaitTitle.Content;
+				updateMandatoryIndicator(stackPanel, tbox.Text, Report.InitialBaitTitle);
+			}
+			else if (tbox == tboxDescription)
+			{
+				StackPanel stackPanel = (StackPanel)lblDescription.Content;
+				updateMandatoryIndicator(stackPanel, tbox.Text, "");
+			}
 		}
 
 		private void textbox_enter(object sender, EventArgs e)
@@ -53,7 +83,6 @@ namespace GiftkoederRadar
 				tbox.Text = "";
 				tbox.Foreground = Brushes.Black;
 			}
-
 		}
 
 		private void btnClick(object sender, EventArgs e)
@@ -69,23 +98,17 @@ namespace GiftkoederRadar
 						MessageBoxButton.YesNo, MessageBoxImage.Warning
 					);
 
-					// Der User möchte die Meldung verwerfen
-					if (dialogResult == MessageBoxResult.Yes)
-						closeDialog = true;
-
-					// Der User möchte die Skizze nicht verwerfen
-					else if (dialogResult == MessageBoxResult.No)
+					// Der User möchte die Meldung nicht verwerfen
+					if (dialogResult == MessageBoxResult.No)
 						return;
 				}
-
-				closeDialog = true;
-				if (calledFromView == View.StartView && closeDialog)
+				if (calledFromView == View.StartView)
 				{
 					MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 					mainWindow.SetActiveView(View.StartView);
 					mainWindow.ChangeView(new StartView());
 				}
-				else if (calledFromView == View.MapView && closeDialog)
+				else if (calledFromView == View.MapView)
 				{
 					MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 					mainWindow.SetActiveView(View.MapView);
@@ -124,29 +147,60 @@ namespace GiftkoederRadar
 			}
 			else if(btn == btnCreateReport)
 			{
-				report.Country = cboxCountry.SelectedItem.ToString();
-				report.PostCode = tboxPostCode.Text;
-				report.Town = tboxTown.Text;
-				report.Street = tboxStreet.Text;
-				report.BaitTitle = tboxBaitTitle.Text;
-				report.Description = tboxDescription.Text;
-				try
+				MessageBoxResult dialogResult = MessageBox.Show
+				(
+					"Sind alle Angaben korrekt?", "Meldung erstellen",
+					MessageBoxButton.YesNo, MessageBoxImage.Warning
+				);
+
+				// Der User möchte die Meldung erstellen
+				if (dialogResult == MessageBoxResult.Yes)
 				{
-					//validateReport();
+					report.Country = cboxCountry.SelectedItem.ToString();
+					report.PostCode = tboxPostCode.Text;
+					report.Town = tboxTown.Text;
+					report.Street = tboxStreet.Text;
+					report.BaitTitle = tboxBaitTitle.Text;
+					report.Description = tboxDescription.Text;
+					
+					// 1.6. Ausnahmen (try, catch, throw)
+					try
+					{
+						validateReport();
+					}
+					catch (Exception ex)
+					{
+						dialogResult = MessageBox.Show
+						(
+							ex.Message, "Meldung unvollständig",
+							MessageBoxButton.OK, MessageBoxImage.Warning
+						);
+						return;
+					}
+					MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+					report.ReportId = mainWindow.GetNextFreeReportId();
+					mainWindow.AddReport(report);
+					mainWindow.SetActiveView(View.MapView);
+					mainWindow.ChangeView(new MapView());
 				}
-				catch(Exception ex)
+			}
+		}
+
+		// Wirft Exception sobald ein Pflichtfeld nicht ausgefüllt wurde
+		private void validateReport()
+		{
+
+		}
+
+		void updateMandatoryIndicator(StackPanel stackPanel, string text, string initialText)
+		{
+			foreach(object child in stackPanel.Children)
+			{
+				TextBlock textBlock = (TextBlock)child;
+				if(textBlock.Foreground == Brushes.Red)
 				{
-					MessageBoxResult dialogResult = MessageBox.Show
-					(
-						ex.Message, "Meldung unvollständig",
-						MessageBoxButton.OK, MessageBoxImage.Warning
-					);
+					textBlock.Text = (text.Length == 0 || text == initialText) ? "*" : "";
 				}
-				MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-				report.ReportId = mainWindow.GetNextFreeReportId();
-				mainWindow.AddReport(report);
-				mainWindow.SetActiveView(View.MapView);
-				mainWindow.ChangeView(new MapView());
 			}
 		}
 
@@ -209,10 +263,8 @@ namespace GiftkoederRadar
 			return BitmapFrame.Create(resizedImage);
 		}
 
-		public Report report { get; set; }
-
+		private Report report;
 		private View calledFromView;
 		private string sketchFilePath; // Falls Image nicht klappt hiermit probieren und Datei von Pfad neu laden
-		private bool closeDialog = false;
 	}
 }

@@ -7,7 +7,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ReportView">
-
 	<Page.Resources>
 		<local:Countries x:Key="Countries"/>
 		<Style TargetType="ComboBoxItem">
@@ -46,13 +45,23 @@
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="1">
 			<Label Content="Wie lautet die Postleitzahl?" HorizontalAlignment="Left"/>
-			<Label x:Name="lblPostCode" Content="Postleitzahl:" HorizontalAlignment="Left"/>
+			<Label x:Name="lblPostCode" HorizontalAlignment="Left">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Postleitzahl: "/>
+					<TextBlock Foreground="Red" Text="*"/>
+				</StackPanel>
+			</Label>
 			<!--2.2.9.TextBox-->
 			<TextBox x:Name="tboxPostCode" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding Path=PostCode}" Foreground="{Binding Path=PostCodeForegroundColor, Mode=TwoWay}" TextAlignment="Left" VerticalContentAlignment="Center" Width="150"/>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="2">
 			<Label Content="In welchem Ort wurde der Giftköder gefunden?" HorizontalAlignment="Left"/>
-			<Label x:Name="lblTown" Content="Ort:" HorizontalAlignment="Left"/>
+			<Label x:Name="lblTown" HorizontalAlignment="Left">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Ort: "/>
+					<TextBlock Foreground="Red" Text="*"/>
+				</StackPanel>
+			</Label>
 			<TextBox x:Name="tboxTown" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding Path=Town}" Foreground="{Binding Path=TownForegroundColor, Mode=TwoWay}" TextAlignment="Left" VerticalContentAlignment="Center" Width="150"/>
 		</StackPanel>
 		<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,4,0,0">
@@ -62,7 +71,12 @@
 		</StackPanel>
 		<StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,4,0,0">
 			<Label Content="Was für ein Giftköder wurde gefunden?"></Label>
-			<Label x:Name="lblBaitTitle" Content="Beschreiben Sie den Giftköder in wenigen Worten:"></Label>
+			<Label x:Name="lblBaitTitle">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Beschreiben Sie den Giftköder in wenigen Worten: "/>
+					<TextBlock Foreground="Red" Text="*"/>
+				</StackPanel>
+			</Label>
 			<TextBox x:Name="tboxBaitTitle" Margin="5,0,0,0" Text="{Binding Path=BaitTitle}" Foreground="{Binding Path=BaitTitleForegroundColor, Mode=TwoWay}" TextAlignment="Left" VerticalContentAlignment="Center"/>
 		</StackPanel>
 		<Label Grid.Row="3" Grid.Column="2" Content="Wie sah der Köder aus? (Skizzieren Sie)" VerticalAlignment="Top"></Label>
@@ -76,7 +90,12 @@
 			<!-- 2.2.4.Canvas -->
 			<Canvas x:Name="canvasSketch"></Canvas>
 		</Border>
-		<Label x:Name="lblDescription" Grid.Row="4" Margin="0,4,0,0" Content="Was ist passiert?"></Label>
+		<Label x:Name="lblDescription" Grid.Row="4" Margin="0,4,0,0">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="Was ist passiert? "/>
+				<TextBlock Foreground="Red" Text="*"/>
+			</StackPanel>
+		</Label>
 		<TextBox x:Name="tboxDescription" Grid.Row="4" Grid.ColumnSpan="2" Margin="5,27,0,0" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
 		<Border Grid.Row="5" Grid.ColumnSpan="2" Margin="5" Padding="5" BorderThickness="1" BorderBrush="Red" Background="#ffcccb" CornerRadius="10">
 			<!-- 2.2.7.TextBlock -->

@@ -8,19 +8,19 @@ namespace GiftkoederRadar
 {
 	public class Report : INotifyPropertyChanged
 	{
-		private static string initialPostCode = "Postleitzahl";
-		private static string initialTown = "Ort";
-		private static string initialStreet = "Optional - Straße";
-		private static string initialBaitTitle = "z.B. Hackfleischstück mit Nägeln";
+		public static string InitialPostCode = "Postleitzahl";
+		public static string InitialTown = "Ort";
+		public static string InitialStreet = "Optional - Straße";
+		public static string InitialBaitTitle = "z.B. Hackfleischstück mit Nägeln";
 		private static Brush initialForegroundColor = Brushes.LightGray;
 
 		public Report()
 		{
 			Country = Countries.First();
-			PostCode = initialPostCode;
-			Town = initialTown;
-			Street = initialStreet;
-			BaitTitle = initialBaitTitle;
+			PostCode = InitialPostCode;
+			Town = InitialTown;
+			Street = InitialStreet;
+			BaitTitle = InitialBaitTitle;
 			PostCodeForegroundColor = initialForegroundColor;
 			TownForegroundColor = initialForegroundColor;
 			StreetForegroundColor = initialForegroundColor;
@@ -73,7 +73,7 @@ namespace GiftkoederRadar
 
 				if (value.Equals(""))
 				{
-					postCode = initialPostCode;
+					postCode = InitialPostCode;
 					PostCodeForegroundColor = initialForegroundColor;
 				}
 				else
@@ -92,7 +92,7 @@ namespace GiftkoederRadar
 
 				if (value.Equals(""))
 				{
-					town = initialTown;
+					town = InitialTown;
 					TownForegroundColor = initialForegroundColor;
 				}					
 				else
@@ -111,7 +111,7 @@ namespace GiftkoederRadar
 
 				if (value.Equals(""))
 				{
-					street = initialStreet;
+					street = InitialStreet;
 					StreetForegroundColor = initialForegroundColor;
 				}
 				else
@@ -130,7 +130,7 @@ namespace GiftkoederRadar
 
 				if (value.Equals(""))
 				{
-					baitTitle = initialBaitTitle;
+					baitTitle = InitialBaitTitle;
 					BaitTitleForegroundColor = initialForegroundColor;
 				}
 				else

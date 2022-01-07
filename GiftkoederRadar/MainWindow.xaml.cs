@@ -69,8 +69,8 @@ namespace GiftkoederRadar
 			{
 				MessageBoxResult dialogResult = MessageBox.Show
 				(
-					"Möchtest Sie das Programm wirklich beenden? " +
-					"Möglicherweise gehen nicht gespeicherte Änderungen verloren", "Meldung erstellen Abbrechen",
+					"Möchtest Sie das Programm wirklich beenden?\n" +
+					"Nicht gespeicherte Änderungen gehen verloren", "Meldung erstellen Abbrechen",
 					MessageBoxButton.YesNo, MessageBoxImage.Warning
 				);
 

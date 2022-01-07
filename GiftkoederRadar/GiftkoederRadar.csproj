@@ -17,6 +17,7 @@
     <None Remove="icons8-sketch-disabled-24.png" />
     <None Remove="icons8-skull-24.png" />
     <None Remove="icons8-trash-24.png" />
+    <None Remove="icons8-warning-25.png" />
     <None Remove="pexels-blue-bird-7210279.jpg" />
   </ItemGroup>
 
@@ -36,6 +37,7 @@
     <Resource Include="icons8-sketch-disabled-24.png" />
     <Resource Include="icons8-skull-24.png" />
     <Resource Include="icons8-trash-24.png" />
+    <Resource Include="icons8-warning-25.png" />
     <Resource Include="pexels-blue-bird-7210279.jpg" />
   </ItemGroup>
 
