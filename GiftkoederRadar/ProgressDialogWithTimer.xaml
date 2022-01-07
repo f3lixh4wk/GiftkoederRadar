@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GiftkoederRadar"
         mc:Ignorable="d"
-        Height="110" Width="450">
+        Height="120" Width="450">
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*"></RowDefinition>
 			<RowDefinition Height="1*"></RowDefinition>
 			<RowDefinition Height="1*"></RowDefinition>
 		</Grid.RowDefinitions>
-		<Label x:Name="lblCurrentOperation" Grid.Row="0"></Label>
+		<Label x:Name="lblCurrentOperation" Grid.Row="0" Margin="30,0,30,0"></Label>
 		<ProgressBar x:Name="pbProgress" Grid.Row="1" Margin="30,0,30,0"></ProgressBar>
-		<Label x:Name="lblRemainingTime" Grid.Row="2"></Label>
+		<Label x:Name="lblRemainingTime" Grid.Row="2" Margin="30,0,30,0"></Label>
     </Grid>
 </Window>

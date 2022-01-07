@@ -107,7 +107,7 @@ namespace GiftkoederRadar
 				// Background Worker start mit Progressbar und Timer(eigener Dialog)
 				// Der Dialog macht nix, er kommt jedes mal wenn eine Meldung erstellt wird
 				// Reports aus dem MainWindow laden
-				ProgressDialogWithTimer progressDialogWithTimer = new ProgressDialogWithTimer(5);
+				ProgressDialogWithTimer progressDialogWithTimer = new ProgressDialogWithTimer(3800);
 				progressDialogWithTimer.Owner = (MainWindow)Application.Current.MainWindow;
 				progressDialogWithTimer.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 				Opacity = 0.5;
