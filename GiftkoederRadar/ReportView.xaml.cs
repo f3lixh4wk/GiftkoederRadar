@@ -28,13 +28,9 @@ namespace GiftkoederRadar
 
 			SizeChanged += new SizeChangedEventHandler(pageWillResize);
 			tboxPostCode.GotFocus += new RoutedEventHandler(textbox_enter);
-			tboxPostCode.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxTown.GotFocus += new RoutedEventHandler(textbox_enter);
-			tboxTown.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxStreet.GotFocus += new RoutedEventHandler(textbox_enter);
-			tboxStreet.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxBaitTitle.GotFocus += new RoutedEventHandler(textbox_enter);
-			tboxBaitTitle.LostFocus += new RoutedEventHandler(textbox_leave);
 
 			//2.3.5.DataBinding: das DataContext-Attribut, die Binding-Syntax (Ganze Vorlesung 9.Data Binding)
 			report = new Report();
@@ -58,22 +54,6 @@ namespace GiftkoederRadar
 				tbox.Foreground = Brushes.Black;
 			}
 
-		}
-		private void textbox_leave(object sender, EventArgs e)
-		{
-			TextBox tbox = (TextBox)sender;
-			if (tbox.Text.Length == 0)
-			{
-				tbox.Foreground = Brushes.LightGray;
-				if (tbox == tboxPostCode)
-					tboxPostCode.Text = "Postleitzahl";
-				else if (tbox == tboxTown)
-					tboxTown.Text = "Ort";
-				else if (tbox == tboxStreet)
-					tboxStreet.Text = "Optional - Straße";
-				else if (tbox == tboxBaitTitle)
-					tboxBaitTitle.Text = "z.B. Hackfleischstück mit Nägeln";
-			}
 		}
 
 		private void btnClick(object sender, EventArgs e)
