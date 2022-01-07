@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons8-about-24.png" />
+    <None Remove="icons8-info-250.png" />
+    <None Remove="icons8-left-100.png" />
+    <None Remove="icons8-minus-100.png" />
+    <None Remove="icons8-plus-+-100.png" />
+    <None Remove="icons8-search-480.png" />
+    <None Remove="icons8-sketch-24.png" />
+    <None Remove="icons8-sketch-disabled-24.png" />
+    <None Remove="icons8-skull-24.png" />
+    <None Remove="icons8-trash-24.png" />
+    <None Remove="pexels-blue-bird-7210279.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GMap.NET.Core" Version="2.0.3" />
+    <PackageReference Include="GMap.NET.WinPresentation" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons8-about-24.png" />
+    <Resource Include="icons8-info-250.png" />
+    <Resource Include="icons8-left-100.png" />
+    <Resource Include="icons8-minus-100.png" />
+    <Resource Include="icons8-plus-+-100.png" />
+    <Resource Include="icons8-search-480.png" />
+    <Resource Include="icons8-sketch-24.png" />
+    <Resource Include="icons8-sketch-disabled-24.png" />
+    <Resource Include="icons8-skull-24.png" />
+    <Resource Include="icons8-trash-24.png" />
+    <Resource Include="pexels-blue-bird-7210279.jpg" />
+  </ItemGroup>
+
+</Project>
