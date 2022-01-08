@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:GiftkoederRadar"
         mc:Ignorable="d"
 		  Closing="MainWindowClosing"
+		  MinHeight="550"
+		  MinWidth="800"
         Title="Giftköder Radar - Felix Germershausen" Height="550" Width="800">
 	<Grid>
 		<Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>

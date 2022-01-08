@@ -6,6 +6,7 @@ using System.Windows.Media;
 
 namespace GiftkoederRadar
 {
+	//1.1. Klasse 
 	public class Report : INotifyPropertyChanged
 	{
 		public static string InitialPostCode = "Postleitzahl";
@@ -37,6 +38,7 @@ namespace GiftkoederRadar
 			}
 		}
 
+		//1.4. Properties
 		public int ReportId
 		{
 			get { return reportId; }
@@ -152,16 +154,16 @@ namespace GiftkoederRadar
 			}
 		}
 
-		public Image Image
+		public string SketchFilePath
 		{
-			get { return image; }
+			get { return sketchFilePath; }
 			set
 			{
-				if (value.Equals(image))
+				if (value.Equals(sketchFilePath))
 					return;
 
-				image = value;
-				OnPropertyChanged("Image");
+				sketchFilePath = value;
+				OnPropertyChanged("SketchFilePath");
 			}
 		}
 
@@ -217,6 +219,7 @@ namespace GiftkoederRadar
 			}
 		}
 
+		//1.5. Felder
 		private int reportId;
 		private string country;
 		private string postCode;
@@ -224,7 +227,7 @@ namespace GiftkoederRadar
 		private string street;
 		private string baitTitle;
 		private string description;
-		private Image image;
+		private string sketchFilePath;
 		private Brush postCodeForegroundColor;
 		private Brush townForegroundColor;
 		private Brush streetForegroundColor;

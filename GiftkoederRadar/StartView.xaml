@@ -9,6 +9,8 @@
       Title="StartView">
 
 	<Page.Resources>
+		<!--2.3.8.Logische Ressourcen (siehe Kap. 5.4 in 5.Weitere Grundlagen und Beispiele
+		BindingAnCollections1-4 in 9.Data Binding) hier StaticResource-->
 		<ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
 			<!-- 2.2.1.Grid -->
 			<!--2.3.10. Einen Style-Trigger-Template (wie in Kapitel 8)-->

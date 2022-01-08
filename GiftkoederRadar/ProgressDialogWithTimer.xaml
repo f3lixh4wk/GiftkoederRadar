@@ -6,14 +6,15 @@
         xmlns:local="clr-namespace:GiftkoederRadar"
         mc:Ignorable="d"
         Height="120" Width="450">
-    <Grid>
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*"></RowDefinition>
 			<RowDefinition Height="1*"></RowDefinition>
 			<RowDefinition Height="1*"></RowDefinition>
 		</Grid.RowDefinitions>
 		<Label x:Name="lblCurrentOperation" Grid.Row="0" Margin="30,0,30,0"></Label>
+		<!--2.2.12. Progressbar-->
 		<ProgressBar x:Name="pbProgress" Grid.Row="1" Margin="30,0,30,0"></ProgressBar>
 		<Label x:Name="lblRemainingTime" Grid.Row="2" Margin="30,0,30,0"></Label>
-    </Grid>
+	</Grid>
 </Window>

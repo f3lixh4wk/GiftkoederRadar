@@ -26,9 +26,13 @@ namespace GiftkoederRadar
 		public MapView(bool showProgress)
 		{
 			InitializeComponent();
-			showProgressDialog = showProgress;
+			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 			tboxSearch.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxSearch.GotFocus += new RoutedEventHandler(textbox_enter);
+			
+			showProgressDialog = showProgress;
+			reports = mainWindow.GetReports();
+			InitReportList();
 		}
 
 		private void btnClick(object sender, RoutedEventArgs e)
@@ -104,10 +108,7 @@ namespace GiftkoederRadar
 
 			if (showProgressDialog)
 			{
-				// Background Worker start mit Progressbar und Timer(eigener Dialog)
-				// Der Dialog macht nix, er kommt jedes mal wenn eine Meldung erstellt wird
-				// Reports aus dem MainWindow laden
-				ProgressDialogWithTimer progressDialogWithTimer = new ProgressDialogWithTimer(3800);
+				ProgressDialogWithTimer progressDialogWithTimer = new ProgressDialogWithTimer(5000);
 				progressDialogWithTimer.Owner = (MainWindow)Application.Current.MainWindow;
 				progressDialogWithTimer.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 				Opacity = 0.5;
@@ -116,6 +117,25 @@ namespace GiftkoederRadar
 			}
 		}
 
+		private void InitReportList()
+		{
+			List<ReportItem> items = new List<ReportItem>();
+			foreach (Report report in reports)
+			{
+				items.Add(new ReportItem() { ItemBaitTitle = report.BaitTitle, ItemDescription = report.Description, SketchFilePath = report.SketchFilePath});
+			}
+			lboxReportList.ItemsSource = items;
+		}
+
+		private List<Report> reports;
 		bool showProgressDialog = false;
+	}
+
+	public class ReportItem
+	{
+		public string ItemBaitTitle { get; set; }
+		public string ItemDescription { get; set; }
+
+		public string SketchFilePath { get; set; }
 	}
 }

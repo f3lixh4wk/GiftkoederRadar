@@ -14,6 +14,7 @@
 			<Setter Property="Padding" Value="5"/>
 		</Style>
 	</Page.Resources>
+	<!--2.1. Die Oberfläche hat ein XAML Gerüst.-->
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="5*"></RowDefinition>
@@ -41,6 +42,7 @@
 			<!--2.2.8.Label-->
 			<Label Content="In welchem Land wurde der Giftköder gefunden?" HorizontalAlignment="Left" Grid.RowSpan="2"/>
 			<Label Content="Land:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<!--2.3.5.DataBinding: das DataContext-Attribut, die Binding-Syntax (Ganze Vorlesung 9.Data Binding)-->
 			<ComboBox x:Name="cboxCountry" ItemsSource="{Binding Source={StaticResource Countries}}" SelectedItem="{Binding Path=Country}" Margin="5,0,0,0" HorizontalAlignment="Left" Width="200"/>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="1">

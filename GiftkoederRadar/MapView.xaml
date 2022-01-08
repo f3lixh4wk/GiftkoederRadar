@@ -13,6 +13,24 @@
 		<Image x:Key="imgSkull" Source="/icons8-skull-24.png"></Image>
 		<!--<Image x:Key="imgSettings" Source="/icons8-settings-24.png"></Image>-->
 		<Image x:Key="imgInfo" Source="/icons8-about-24.png"></Image>
+		<!--2.3.7.DataTemplate  (9.DataBinding)-->
+		<DataTemplate x:Key="listItemTemplate">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="1*"></ColumnDefinition>
+					<ColumnDefinition Width="5*"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="1*"></RowDefinition>
+					<RowDefinition Height="5*"></RowDefinition>
+				</Grid.RowDefinitions>
+				<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ItemBaitTitle, FallbackValue='Kein Ködertitel gefunden'}"/>
+				<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ItemDescription, FallbackValue='Keine Beschreibung gefuden'}"/>
+				<Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" BorderThickness="1" BorderBrush="Black" Background="White">
+					<Image Source="{Binding SketchFilePath}"/>
+				</Border>
+			</Grid>
+		</DataTemplate>
 	</Page.Resources>
 	<!-- 2.2.3.DockPanel -->
 	<DockPanel>
@@ -51,8 +69,9 @@
 				<TextBox x:Name="tboxSearch" Width="200" Margin="10,0,0,0" Text="PLZ, Ort" FontSize="18" Foreground="LightGray" TextAlignment="Left" VerticalContentAlignment="Center"/>
 			</StackPanel>
 			<!--2.2.10. ListBox-->
-			<ListBox Grid.Row="1"></ListBox>
+			<!--2.3.6.ListBox, ItemTemplate-Attribut-->
 			<gmaps:GMapControl x:Name="mapView" Grid.Row="1" Grid.Column="1" Loaded="mapViewLoaded"/>
+			<ListBox x:Name="lboxReportList" Grid.Row="1" ItemTemplate="{StaticResource listItemTemplate}"/>
 		</Grid>
 	</DockPanel>
 </Page>

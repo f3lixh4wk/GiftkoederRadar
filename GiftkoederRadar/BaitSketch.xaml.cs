@@ -47,6 +47,7 @@ namespace GiftkoederRadar
 		{
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
+				//2.3.3.In ein Canvas dynamisch zeichnen (wie in Aufgabe 8.2)
 				Line line = new Line();
 
 				line.Stroke = SystemColors.WindowFrameBrush;
@@ -68,9 +69,8 @@ namespace GiftkoederRadar
 			{
 				closeDialog = true;
 				DialogResult = true; // calls baitSketchClosing
-				string fileName = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\sketch.png";
-				SketchFileName = fileName;
-				createBitmapFromCanvas(fileName);
+				SketchFileName = GetNextFreeFileName();
+				createBitmapFromCanvas();
 			}
 			else if (btn == btnCancel)
 			{
@@ -118,7 +118,7 @@ namespace GiftkoederRadar
 			}
 		}
 
-		void createBitmapFromCanvas(string filename)
+		void createBitmapFromCanvas()
 		{
 			Rect bounds = VisualTreeHelper.GetDescendantBounds(paintArea);
 			RenderTargetBitmap rtb = new RenderTargetBitmap
@@ -140,13 +140,26 @@ namespace GiftkoederRadar
 
 			PngBitmapEncoder sketch = new PngBitmapEncoder();
 			sketch.Frames.Add(BitmapFrame.Create(rtb));
-			using (Stream stm = File.Create(filename))
+			using (Stream stm = File.Create(SketchFileName))
 				sketch.Save(stm);
 		}
 
+		private string GetNextFreeFileName()
+		{
+			string sketchDirPath = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+			int nextFreeFileIndex = 0;
+			string sketchFilePath = sketchDirPath + "\\sketch" + nextFreeFileIndex.ToString() + pngSuffix;
+			while(File.Exists(sketchFilePath))
+			{
+				++nextFreeFileIndex;
+				sketchFilePath = sketchDirPath + "\\sketch" + nextFreeFileIndex.ToString() + pngSuffix;
+			}
+			return sketchFilePath;
+		}
 		public string SketchFileName { get; set; }
 
 		private bool closeDialog = false;
 		private Point currentPoint;
+		private string pngSuffix = ".png";
 	}
 }

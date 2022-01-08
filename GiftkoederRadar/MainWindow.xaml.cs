@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -58,6 +60,11 @@ namespace GiftkoederRadar
 			reports.Add(report);
 		}
 
+		public List<Report> GetReports()
+		{
+			return reports;
+		}
+
 		public int GetNextFreeReportId()
 		{
 			return reports.Count;
@@ -76,15 +83,36 @@ namespace GiftkoederRadar
 
 				// Der User möchte die Meldung verwerfen
 				if (dialogResult == MessageBoxResult.Yes)
+				{
+					RemoveAllSketchFiles();
 					e.Cancel = false;
+				}
 
-				// Der User möchte die Skizze nicht verwerfen
 				else if (dialogResult == MessageBoxResult.No)
 					e.Cancel = true;
+			}
+			else if(activeView == View.MapView)
+			{
+				RemoveAllSketchFiles();
+			}
+		}
+
+		private void RemoveAllSketchFiles()
+		{
+			string sketchDirPath = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+			int nextFreeFileIndex = 0;
+			string sketchFilePath = sketchDirPath + "\\sketch" + nextFreeFileIndex.ToString() + pngSuffix;
+			while (File.Exists(sketchFilePath))
+			{
+				File.Delete(sketchFilePath);
+
+				++nextFreeFileIndex;
+				sketchFilePath = sketchDirPath + "\\sketch" + nextFreeFileIndex.ToString() + pngSuffix;
 			}
 		}
 
 		private List<Report> reports;
 		private View activeView;
+		private string pngSuffix = ".png";
 	}
 }

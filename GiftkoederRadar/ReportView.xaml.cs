@@ -27,6 +27,9 @@ namespace GiftkoederRadar
 			InitializeComponent();
 
 			SizeChanged += new SizeChangedEventHandler(pageWillResize);
+
+			//2.3. WPF-Events (Click, MouseEnter…)
+			//1.2. Event 
 			tboxPostCode.GotFocus += new RoutedEventHandler(textbox_enter);
 			tboxPostCode.TextChanged += new TextChangedEventHandler(textbox_textChanged);
 			tboxTown.GotFocus += new RoutedEventHandler(textbox_enter);
@@ -129,7 +132,7 @@ namespace GiftkoederRadar
 				{
 					// Canvas Inhalt speichern
 					sketchFilePath = baitSketchWindow.SketchFileName;
-					loadBitmapToCanvas(sketchFilePath);
+					loadBitmapToCanvas();
 					btnOpenSketch.IsEnabled = false;
 					btnOpenSketch.Content = new Image
 					{
@@ -139,7 +142,19 @@ namespace GiftkoederRadar
 			}
 			else if (btn == btnDeleteSketch)
 			{
+				MessageBoxResult dialogResult = MessageBox.Show
+				(
+					"Wollen Sie die Skizze wirklich löschen?", "Sizze löschen",
+					MessageBoxButton.YesNo, MessageBoxImage.Warning
+				);
+				// Der User möchte die Skizze nicht löschen
+				if (dialogResult == MessageBoxResult.No)
+					return;
+
 				canvasSketch.Children.Clear();
+				if (File.Exists(sketchFilePath))
+					File.Delete(sketchFilePath);
+
 				btnOpenSketch.IsEnabled = true;
 				btnOpenSketch.Content = new Image
 				{
@@ -163,8 +178,9 @@ namespace GiftkoederRadar
 					report.Street = tboxStreet.Text;
 					report.BaitTitle = tboxBaitTitle.Text;
 					report.Description = tboxDescription.Text;
+					report.SketchFilePath = File.Exists(sketchFilePath) ? sketchFilePath : "";
 					
-					// 1.6. Ausnahmen (try, catch, throw)
+					//1.6. Ausnahmen (try, catch, throw)
 					try
 					{
 						validateReport();
@@ -203,6 +219,7 @@ namespace GiftkoederRadar
 				throw new Exception("Es muss angegeben werden, was passiert ist!");
 		}
 
+		// 1.3. Methoden
 		void updateMandatoryIndicator(StackPanel stackPanel, string text, string initialText)
 		{
 			foreach(object child in stackPanel.Children)
@@ -233,16 +250,16 @@ namespace GiftkoederRadar
 		private void pageWillResize(object sender, EventArgs e)
 		{
 			canvasSketch.Children.Clear();
-			loadBitmapToCanvas(sketchFilePath);
+			loadBitmapToCanvas();
 		}
 
-		private void loadBitmapToCanvas(string filename)
+		private void loadBitmapToCanvas()
 		{
-			if (filename == null || filename.Length == 0)
+			if (sketchFilePath == null || sketchFilePath.Length == 0)
 				return;
 
 			// Dekodiere die Skizze
-			Stream imageStreamSource = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+			Stream imageStreamSource = new FileStream(sketchFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
 			PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
 			BitmapSource bitmapSource = decoder.Frames[0];
 
@@ -250,11 +267,10 @@ namespace GiftkoederRadar
 			double width = canvasSketch.ActualWidth;
 
 			bitmapSource = resizeImage(bitmapSource, (int)width, (int)height);
-			Image myImage = new Image();
-			myImage.Source = bitmapSource;
-			myImage.Stretch = Stretch.None;
-			canvasSketch.Children.Add(myImage);
-			report.Image = myImage;
+			Image image = new Image();
+			image.Source = bitmapSource;
+			image.Stretch = Stretch.None;
+			canvasSketch.Children.Add(image);
 		}
 
 		private static BitmapFrame resizeImage(ImageSource source, int width, int height)
@@ -276,6 +292,6 @@ namespace GiftkoederRadar
 
 		private Report report;
 		private View calledFromView;
-		private string sketchFilePath; // Falls Image nicht klappt hiermit probieren und Datei von Pfad neu laden
+		private string sketchFilePath;
 	}
 }
