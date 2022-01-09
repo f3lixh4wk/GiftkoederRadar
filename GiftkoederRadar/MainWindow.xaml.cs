@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,10 +56,17 @@ namespace GiftkoederRadar
 			activeView = view;
 		}
 
+		// Füge ein stream hinzu, der auf eine sketch*.png verweist 
+		public void AddStreamSource(Stream stream)
+		{
+			imageStreamSources.Add(stream);
+		}
+
 		public void AddReport(Report report)
 		{
 			reports.Add(report);
 		}
+		
 
 		public List<Report> GetReports()
 		{
@@ -84,6 +92,7 @@ namespace GiftkoederRadar
 				// Der User möchte die Meldung verwerfen
 				if (dialogResult == MessageBoxResult.Yes)
 				{
+					closeStreamSources();
 					RemoveAllSketchFiles();
 					e.Cancel = false;
 				}
@@ -93,7 +102,9 @@ namespace GiftkoederRadar
 			}
 			else if(activeView == View.MapView)
 			{
+				closeStreamSources();
 				RemoveAllSketchFiles();
+				e.Cancel = false;
 			}
 		}
 
@@ -104,13 +115,30 @@ namespace GiftkoederRadar
 			string sketchFilePath = sketchDirPath + "\\sketch" + nextFreeFileIndex.ToString() + pngSuffix;
 			while (File.Exists(sketchFilePath))
 			{
-				File.Delete(sketchFilePath);
+				//1.6. Ausnahmen (try, catch, throw)
+				try
+				{
+					File.Delete(sketchFilePath);
+				}
+				catch (IOException)
+				{
+					//Datei ist momentan in Benutzung
+				}
 
 				++nextFreeFileIndex;
 				sketchFilePath = sketchDirPath + "\\sketch" + nextFreeFileIndex.ToString() + pngSuffix;
 			}
 		}
 
+		private void closeStreamSources()
+		{
+			foreach(Stream stream in imageStreamSources)
+			{
+				stream.Close();
+			}
+		}
+
+		private List<Stream> imageStreamSources = new List<Stream>();
 		private List<Report> reports;
 		private View activeView;
 		private string pngSuffix = ".png";

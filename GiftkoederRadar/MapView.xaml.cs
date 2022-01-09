@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GMap.NET;
 using GMap.NET.MapProviders;
+using GMap.NET.WindowsPresentation;
 
 namespace GiftkoederRadar
 {
@@ -52,9 +53,20 @@ namespace GiftkoederRadar
 			}
 			else if (btn == btnSearchInMap)
 			{
-
+				string location = tboxSearch.Text;
+				GeoCoderStatusCode statusCode = setMapPositionByKeywords(location);
+				if (statusCode != GeoCoderStatusCode.OK)
+				{
+					MessageBoxResult dialogResult = MessageBox.Show
+					(
+						"Die Suche nach: " + location + " konnte leider nicht angezeigt werden",
+						"Ungültige Suche",
+						MessageBoxButton.OK, MessageBoxImage.Error
+					);
+					return;
+				}
+				mapView.Zoom = 13;
 			}
-
 		}
 
 		private void textbox_leave(object sender, EventArgs e)
@@ -97,15 +109,7 @@ namespace GiftkoederRadar
 
 		private void mapViewLoaded(object sender, RoutedEventArgs e)
 		{
-			GMaps.Instance.Mode = AccessMode.ServerAndCache;
-			mapView.MapProvider = GoogleMapProvider.Instance;
-			mapView.MinZoom = 2;
-			mapView.MaxZoom = 17;
-			mapView.Zoom = 2;
-			mapView.MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter;
-			mapView.CanDragMap = true;
-			mapView.DragButton = MouseButton.Left;
-
+			initGMap();
 			if (showProgressDialog)
 			{
 				ProgressDialogWithTimer progressDialogWithTimer = new ProgressDialogWithTimer(5000);
@@ -120,22 +124,93 @@ namespace GiftkoederRadar
 		private void InitReportList()
 		{
 			List<ReportItem> items = new List<ReportItem>();
+			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 			foreach (Report report in reports)
 			{
-				items.Add(new ReportItem() { ItemBaitTitle = report.BaitTitle, ItemDescription = report.Description, SketchFilePath = report.SketchFilePath});
+				items.Add(new ReportItem() 
+				{ 
+					ItemId = report.ReportId,
+					ItemBaitTitle = report.BaitTitle, 
+					ItemDescription = report.Description, 
+					SketchFilePath = report.SketchFilePath
+				});
 			}
 			lboxReportList.ItemsSource = items;
 		}
 
+		private void initGMap()
+		{
+			GMaps.Instance.Mode = AccessMode.ServerOnly;
+			mapView.MapProvider = GMapProviders.OpenStreetMap; // Für GoogleMaps wird ein API Schlüssel benötigt
+			mapView.MinZoom = 2;
+			mapView.MaxZoom = 17;
+			mapView.Zoom = 12;
+			mapView.MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter;
+			mapView.CanDragMap = true;
+			mapView.DragButton = MouseButton.Left;
+			mapView.ShowCenter = false;
+			mapView.SetPositionByKeywords("Göttingen, Germany");
+		}
+
 		private List<Report> reports;
 		bool showProgressDialog = false;
+
+		private void lboxReportList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ReportItem reportItem = (ReportItem)lboxReportList.SelectedItem;
+			string postCode = getElementById(reportItem.ItemId, "PostCode");
+			string town = getElementById(reportItem.ItemId, "Town");
+			string street = getElementById(reportItem.ItemId, "Street");
+
+			GeoCoderStatusCode statusCode = setMapPositionByKeywords(postCode);
+			if(statusCode != GeoCoderStatusCode.OK)
+			{
+				MessageBoxResult dialogResult = MessageBox.Show
+				(
+					"Die Giftköder-Meldung mit der Postleitzahl: " + postCode + " konnte leider nicht angezeigt werden",
+					"Ungültige Postleitzahl",
+					MessageBoxButton.OK, MessageBoxImage.Error
+				);
+				return;
+			}
+			mapView.Zoom = 15;
+			PointLatLng position = mapView.Position;
+			GMapMarker marker = new GMapMarker(position);
+			marker.Shape = new Image
+			{
+				Width = 30,
+				Height = 30,
+				Source = new BitmapImage(new Uri("/icons8-warning-25.png", UriKind.Relative))
+			};
+			mapView.Markers.Add(marker);
+		}
+
+		private GeoCoderStatusCode setMapPositionByKeywords(string postCode)
+		{
+			return mapView.SetPositionByKeywords(postCode);
+		}
+
+		private string getElementById(int id, string elementName)
+		{
+			string elementValue = "";
+			foreach(Report report in reports)
+			{
+				if (report.ReportId == id && nameof(report.PostCode) == elementName)
+					elementValue = report.PostCode;
+				else if (report.ReportId == id && nameof(report.Town) == elementName)
+					elementValue = report.Town;
+				else if (report.ReportId == id && nameof(report.Street) == elementName)
+					elementValue = report.Street;
+			}
+			return elementValue;
+		}
 	}
 
 	public class ReportItem
 	{
+		public int ItemId { get; set; }
 		public string ItemBaitTitle { get; set; }
 		public string ItemDescription { get; set; }
-
 		public string SketchFilePath { get; set; }
 	}
 }

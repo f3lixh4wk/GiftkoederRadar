@@ -45,6 +45,11 @@ namespace GiftkoederRadar
 			calledFromView = callingView;
 		}
 
+		public void ClearSketch()
+		{
+			canvasSketch.Children.Clear();
+		}
+
 		private void textbox_textChanged(object sender, EventArgs e)
 		{
 			// Den Pflichtfeldindikator * überprüfen
@@ -194,6 +199,7 @@ namespace GiftkoederRadar
 						);
 						return;
 					}
+					canvasSketch.Children.Clear();
 					MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 					report.ReportId = mainWindow.GetNextFreeReportId();
 					mainWindow.AddReport(report);
@@ -262,6 +268,9 @@ namespace GiftkoederRadar
 			Stream imageStreamSource = new FileStream(sketchFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
 			PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
 			BitmapSource bitmapSource = decoder.Frames[0];
+
+			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+			mainWindow.AddStreamSource(imageStreamSource);
 
 			double height = canvasSketch.ActualHeight;
 			double width = canvasSketch.ActualWidth;

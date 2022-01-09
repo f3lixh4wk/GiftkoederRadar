@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -71,7 +72,7 @@ namespace GiftkoederRadar
 			BackgroundWorker worker = (BackgroundWorker)sender;
 			for (int millisecond = 0; millisecond <= waitingTimeInMilliseconds; millisecond++)
 			{
-				System.Threading.Thread.Sleep(1);
+				Thread.Sleep(1);
 				worker.ReportProgress(millisecond);
 			}
 		}

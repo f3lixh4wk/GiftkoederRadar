@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:GiftkoederRadar"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+		JournalEntry.KeepAlive="False"
       Title="StartView">
 
 	<Page.Resources>
