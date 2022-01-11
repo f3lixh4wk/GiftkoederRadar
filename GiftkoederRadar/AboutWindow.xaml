@@ -33,6 +33,7 @@
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/search" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/search</Hyperlink> (zuletzt aufgerufen am 02.01.2022)<LineBreak/>
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/info" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/info</Hyperlink> (zuletzt aufgerufen am 02.01.2022)<LineBreak/>
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/warning" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/warning</Hyperlink> (zuletzt aufgerufen am 05.01.2022)<LineBreak/>
+			<Hyperlink NavigateUri="https://icons8.com/icons/set/expand" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/expand</Hyperlink> (zuletzt aufgerufen am 11.01.2022)<LineBreak/>
 		</TextBlock>
 	</Grid>
 </Window>

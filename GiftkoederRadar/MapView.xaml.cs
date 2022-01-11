@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,6 +20,16 @@ using GMap.NET.WindowsPresentation;
 
 namespace GiftkoederRadar
 {
+	// TODO:
+	// Vektor 2D Grafik
+
+	// Weitere machbare Ideen: 
+	// Datum und Uhrzeit der Giftköder Erstellung als Tooltip am Marker oder im Dialog mit dem Titel und der Beschreibung
+
+	// Weitere Ideen nach Abgabe:
+	// Versenden der Giftködermeldung als Email
+	// Anbindung an die Internetseite
+
 	/// <summary>
 	/// Interaktionslogik für MapView.xaml
 	/// </summary>
@@ -27,13 +38,14 @@ namespace GiftkoederRadar
 		public MapView(bool showProgress)
 		{
 			InitializeComponent();
-			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 			tboxSearch.LostFocus += new RoutedEventHandler(textbox_leave);
 			tboxSearch.GotFocus += new RoutedEventHandler(textbox_enter);
-			
+
+			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 			showProgressDialog = showProgress;
 			reports = mainWindow.GetReports();
-			InitReportList();
+			initReportList();
+			initBaitMarker();
 		}
 
 		private void btnClick(object sender, RoutedEventArgs e)
@@ -54,6 +66,9 @@ namespace GiftkoederRadar
 			else if (btn == btnSearchInMap)
 			{
 				string location = tboxSearch.Text;
+				if (location.Length == 0 || location == initialSearch)
+					return;
+
 				GeoCoderStatusCode statusCode = setMapPositionByKeywords(location);
 				if (statusCode != GeoCoderStatusCode.OK)
 				{
@@ -67,20 +82,44 @@ namespace GiftkoederRadar
 				}
 				mapView.Zoom = 13;
 			}
+			else if (btn == btnRemove)
+			{
+				List<ReportItem> reportItems = (List<ReportItem>)lboxReportList.ItemsSource;
+				ReportItem reportItem = (ReportItem)lboxReportList.SelectedItem;
+				if (reportItem == null)
+					return;
+
+				PointLatLng position = getPositionFromItem(reportItem);
+				GMapMarker marker = mapView.Markers.First(x => x.Position == position);
+				mapView.Markers.Remove(marker);
+
+				reports.RemoveAll(report => report.ReportId == reportItem.ItemId);
+				reportItems.Remove(reportItem);
+				lboxReportList.ItemsSource = reportItems;
+				lboxReportList.Items.Refresh();
+
+				mapView.SetPositionByKeywords(standardLocation);
+				mapView.Zoom = 12;
+			}
+			else if(btn == btnExpandMap)
+			{
+				mapView.SetPositionByKeywords(standardLocation);
+				mapView.Zoom = 12;
+			}
 		}
 
 		private void textbox_leave(object sender, EventArgs e)
 		{
 			if (tboxSearch.Text.Length == 0)
 			{
-				tboxSearch.Text = "PLZ, Ort";
+				tboxSearch.Text = initialSearch;
 				tboxSearch.Foreground = Brushes.LightGray;
 			}
 		}
 
 		private void textbox_enter(object sender, EventArgs e)
 		{
-			if (tboxSearch.Text == "PLZ, Ort")
+			if (tboxSearch.Text == initialSearch)
 			{
 				tboxSearch.Text = "";
 				tboxSearch.Foreground = Brushes.Black;
@@ -121,27 +160,45 @@ namespace GiftkoederRadar
 			}
 		}
 
-		private void InitReportList()
+		private void initReportList()
 		{
 			List<ReportItem> items = new List<ReportItem>();
-			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 			foreach (Report report in reports)
 			{
-				items.Add(new ReportItem() 
-				{ 
+				items.Add(new ReportItem()
+				{
 					ItemId = report.ReportId,
-					ItemBaitTitle = report.BaitTitle, 
-					ItemDescription = report.Description, 
+					ItemBaitTitle = report.BaitTitle,
+					ItemDescription = report.Description,
 					SketchFilePath = report.SketchFilePath
 				});
 			}
 			lboxReportList.ItemsSource = items;
 		}
 
+		private void initBaitMarker()
+		{
+			List<ReportItem> reportItems = (List<ReportItem>)lboxReportList.ItemsSource;
+			foreach (ReportItem reportItem in reportItems)
+			{
+				PointLatLng position = getPositionFromItem(reportItem);
+				GMapMarker marker = new GMapMarker(position);
+				marker.Shape = new Image
+				{
+					Width = 30,
+					Height = 30,
+					Source = new BitmapImage(new Uri("/icons8-warning-25.png", UriKind.Relative))
+				};
+				mapView.Markers.Add(marker);
+			}
+		}
+
 		private void initGMap()
 		{
 			GMaps.Instance.Mode = AccessMode.ServerOnly;
-			mapView.MapProvider = GMapProviders.OpenStreetMap; // Für GoogleMaps wird ein API Schlüssel benötigt
+
+			// Für GoogleMaps wird ein API Schlüssel benötigt, daher wird OpenStreetMaps verwendet
+			mapView.MapProvider = GMapProviders.OpenStreetMap;
 			mapView.MinZoom = 2;
 			mapView.MaxZoom = 17;
 			mapView.Zoom = 12;
@@ -149,51 +206,60 @@ namespace GiftkoederRadar
 			mapView.CanDragMap = true;
 			mapView.DragButton = MouseButton.Left;
 			mapView.ShowCenter = false;
-			mapView.SetPositionByKeywords("Göttingen, Germany");
+			mapView.SetPositionByKeywords(standardLocation);
 		}
-
-		private List<Report> reports;
-		bool showProgressDialog = false;
 
 		private void lboxReportList_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ReportItem reportItem = (ReportItem)lboxReportList.SelectedItem;
+			if (reportItem == null)
+				return;
+
 			string postCode = getElementById(reportItem.ItemId, "PostCode");
 			string town = getElementById(reportItem.ItemId, "Town");
 			string street = getElementById(reportItem.ItemId, "Street");
 
-			GeoCoderStatusCode statusCode = setMapPositionByKeywords(postCode);
-			if(statusCode != GeoCoderStatusCode.OK)
+			GeoCoderStatusCode statusCode;
+			if (street.Length != 0 && street != Report.InitialStreet)
+			{
+				string keywords = street + ", " + town;
+				statusCode = setMapPositionByKeywords(keywords);
+			}
+			else { statusCode = setMapPositionByKeywords(postCode); }
+
+			if (statusCode != GeoCoderStatusCode.OK)
 			{
 				MessageBoxResult dialogResult = MessageBox.Show
 				(
-					"Die Giftköder-Meldung mit der Postleitzahl: " + postCode + " konnte leider nicht angezeigt werden",
-					"Ungültige Postleitzahl",
+					"Die Giftköder-Meldung konnte leider nicht angezeigt werden",
+					"Ungültige Adresse",
 					MessageBoxButton.OK, MessageBoxImage.Error
 				);
 				return;
 			}
 			mapView.Zoom = 15;
-			PointLatLng position = mapView.Position;
-			GMapMarker marker = new GMapMarker(position);
-			marker.Shape = new Image
-			{
-				Width = 30,
-				Height = 30,
-				Source = new BitmapImage(new Uri("/icons8-warning-25.png", UriKind.Relative))
-			};
-			mapView.Markers.Add(marker);
 		}
 
-		private GeoCoderStatusCode setMapPositionByKeywords(string postCode)
+		private GeoCoderStatusCode setMapPositionByKeywords(string keywords)
 		{
-			return mapView.SetPositionByKeywords(postCode);
+			return mapView.SetPositionByKeywords(keywords);
+		}
+
+		private PointLatLng getPositionFromItem(ReportItem reportItem)
+		{
+			Report report = reports.First(x => x.ReportId == reportItem.ItemId);
+			if (report.Street.Length != 0 && report.Street != Report.InitialStreet)
+			{
+				string keywords = report.Street + ", " + report.Town;
+				return mapView.GetPositionByKeywords(keywords);
+			}
+			return mapView.GetPositionByKeywords(report.PostCode);
 		}
 
 		private string getElementById(int id, string elementName)
 		{
 			string elementValue = "";
-			foreach(Report report in reports)
+			foreach (Report report in reports)
 			{
 				if (report.ReportId == id && nameof(report.PostCode) == elementName)
 					elementValue = report.PostCode;
@@ -204,6 +270,11 @@ namespace GiftkoederRadar
 			}
 			return elementValue;
 		}
+
+		private List<Report> reports;
+		private bool showProgressDialog = false;
+		private string standardLocation = "Göttingen, Germany";
+		private string initialSearch = "PLZ, Ort";
 	}
 
 	public class ReportItem

@@ -33,7 +33,6 @@ namespace GiftkoederRadar
 	{
 		public MainWindow()
 		{
-			// TODO window minimum size
 			InitializeComponent();
 			reports = new List<Report>();
 			Application.Current.MainWindow = this;
@@ -62,9 +61,21 @@ namespace GiftkoederRadar
 			imageStreamSources.Add(stream);
 		}
 
-		public void AddReport(Report report)
+		public bool AddReport(Report report)
 		{
+			bool has = reports.Any(x => x.PostCode == report.PostCode && x.Town == report.Town);
+			if(has && (report.Street.Length == 0 || report.Street == Report.InitialStreet))
+			{
+				MessageBoxResult dialogResult = MessageBox.Show
+				(
+					"Eine Meldung mit der Postleitzahl: " + report.PostCode +
+					" und der Stadt: " + report.Town + " wurde bereits hinzugefügt", "Meldung bereits vorhanden",
+					MessageBoxButton.OK, MessageBoxImage.Error
+				);
+				return false;
+			}
 			reports.Add(report);
+			return true;
 		}
 		
 

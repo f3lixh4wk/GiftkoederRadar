@@ -202,7 +202,9 @@ namespace GiftkoederRadar
 					canvasSketch.Children.Clear();
 					MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 					report.ReportId = mainWindow.GetNextFreeReportId();
-					mainWindow.AddReport(report);
+					if(!mainWindow.AddReport(report))
+						return;
+
 					mainWindow.SetActiveView(View.MapView);
 					bool showProgressDialog = true;
 					mainWindow.ChangeView(new MapView(showProgressDialog));

@@ -45,6 +45,7 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
 				<ColumnDefinition Width="2*"></ColumnDefinition>
+				<ColumnDefinition Width="0.14*"></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="1*"></RowDefinition>
@@ -52,25 +53,28 @@
 			</Grid.RowDefinitions>
 			<StackPanel Orientation="Horizontal">
 				<!--2.2.6.Button-->
-				<Button x:Name="btnBack" ToolTipService.ToolTip="Zurück" HorizontalAlignment="Left" Click="btnClick">
+				<Button x:Name="btnBack" ToolTipService.ToolTip="Zurück" Click="btnClick">
 					<Image Source="/icons8-left-100.png"></Image>
 				</Button>
-				<Button x:Name="btnAdd" ToolTipService.ToolTip="Giftköder melden" HorizontalAlignment="Center" Margin="10,0,0,0" Click="btnClick">
+				<Button x:Name="btnAdd" ToolTipService.ToolTip="Giftköder melden" Margin="10,0,0,0" Click="btnClick">
 					<Image Source="/icons8-plus-+-100.png"></Image>
 				</Button>
-				<Button x:Name="btnRemove" ToolTipService.ToolTip="Meldung entfernen" HorizontalAlignment="Right" Margin="10,0,0,0" Click="btnClick">
+				<Button x:Name="btnRemove" ToolTipService.ToolTip="Meldung entfernen" Margin="10,0,0,0" Click="btnClick">
 					<Image Source="/icons8-minus-100.png"></Image>
 				</Button>
 			</StackPanel>
 			<StackPanel Grid.Column="1" Orientation="Horizontal">
-				<Button x:Name="btnSearchInMap" ToolTipService.ToolTip="Suche in Karte" HorizontalAlignment="Left" Click="btnClick">
-					<Image Source="/icons8-search-480.png"></Image>
+				<Button x:Name="btnSearchInMap" ToolTipService.ToolTip="Suche in Karte" Click="btnClick">
+					<Image Source="/icons8-search-480.png"/>
 				</Button>
 				<TextBox x:Name="tboxSearch" Width="200" Margin="10,0,0,0" Text="PLZ, Ort" FontSize="18" Foreground="LightGray" TextAlignment="Left" VerticalContentAlignment="Center"/>
 			</StackPanel>
+			<Button x:Name="btnExpandMap" Grid.Row="0" Grid.Column="2" ToolTipService.ToolTip="Ansicht zurücksetzten" Click="btnClick">
+				<Image Source="/icons8-expand-64.png"/>
+			</Button>
 			<!--2.2.10. ListBox-->
 			<!--2.3.6.ListBox, ItemTemplate-Attribut-->
-			<gmaps:GMapControl x:Name="mapView" Grid.Row="1" Grid.Column="1" Loaded="mapViewLoaded"/>
+			<gmaps:GMapControl x:Name="mapView" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Loaded="mapViewLoaded"/>
 			<ListBox x:Name="lboxReportList" Grid.Row="1" ItemTemplate="{StaticResource listItemTemplate}" SelectionChanged="lboxReportList_SelectionChanged"/>
 		</Grid>
 	</DockPanel>
