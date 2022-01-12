@@ -6,16 +6,29 @@
         xmlns:local="clr-namespace:GiftkoederRadar"
         mc:Ignorable="d"
 		  ResizeMode="NoResize"
-        Title="AboutWindow" Height="450" Width="800">
+        Title="Info" Height="450" Width="800">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*"></RowDefinition>
 			<RowDefinition Height="2*"></RowDefinition>
 		</Grid.RowDefinitions>
-		<Image Source="/icons8-info-250.png" HorizontalAlignment="Left"></Image>
-		<Label Content="Giftköder Radar" FontFamily="Segoe UI Semilight" FontSize="25" Foreground="red" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-		<Label Content="(Version 1.0.0)" FontFamily="Segoe UI Semilight" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10"></Label>
-		<TextBlock Grid.Row="1" TextWrapping="Wrap" TextAlignment="Center" FontFamily="Segoe UI Semilight" Margin="5,5,5,5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="0.3*"></ColumnDefinition>
+			<ColumnDefinition Width="1*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<!--2.3.9.Eine 2D-Vektorgrafik (wie in Kapitel 7)-->
+		<Canvas Grid.Column="0" Grid.Row="0">
+			<Ellipse Height="144" Width="144" Stroke="Black" StrokeThickness="2" Canvas.Left="20"/>
+			<Ellipse Height="25" Width="25" Fill="Black" Canvas.Top="10" Canvas.Left="78"/>
+			<Rectangle Width="10" Height="80" Fill="Black" Canvas.Top="40" Canvas.Left="88"/>
+			<Rectangle Width="20" Height="10" Fill="Black" Canvas.Top="40" Canvas.Left="77"/>
+			<Rectangle Width="50" Height="10" Fill="Black" Canvas.Top="110" Canvas.Left="68"/>
+		</Canvas>
+		<StackPanel Grid.Column="1" Margin="0,20,195,0">
+			<Label Content="Giftköder Radar" HorizontalAlignment="Center" FontFamily="Segoe UI Semilight" FontSize="25" Foreground="red" VerticalAlignment="Center"></Label>
+			<Label Content="(Version 1.0.0)" FontFamily="Segoe UI Semilight" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10"></Label>
+		</StackPanel>
+		<TextBlock Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" TextAlignment="Center" FontFamily="Segoe UI Semilight" Margin="5,5,5,5">
 			Dieses Programm wurde im Rahmen der 
 			Prüfungsleistung im Fach Userinterface Programmierung
 			entwickelt. Jegliche Vervielfältigung, Verbreitung oder 
@@ -31,9 +44,10 @@
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/minus" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/minus</Hyperlink> (zuletzt aufgerufen am 02.01.2022)<LineBreak/>
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/plus" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/plus</Hyperlink> (zuletzt aufgerufen am 02.01.2022)<LineBreak/>
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/search" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/search</Hyperlink> (zuletzt aufgerufen am 02.01.2022)<LineBreak/>
-			<Hyperlink NavigateUri="https://icons8.com/icons/set/info" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/info</Hyperlink> (zuletzt aufgerufen am 02.01.2022)<LineBreak/>
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/warning" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/warning</Hyperlink> (zuletzt aufgerufen am 05.01.2022)<LineBreak/>
 			<Hyperlink NavigateUri="https://icons8.com/icons/set/expand" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/expand</Hyperlink> (zuletzt aufgerufen am 11.01.2022)<LineBreak/>
+			<Hyperlink NavigateUri="https://icons8.com/icons/set/year-of-dog" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/year-of-dog</Hyperlink> (zuletzt aufgerufen am 12.01.2022)<LineBreak/>
+			<Hyperlink NavigateUri="https://icons8.com/icons/set/radar" RequestNavigate="Hyperlink_RequestNavigate">https://icons8.com/icons/set/radar</Hyperlink> (zuletzt aufgerufen am 12.01.2022)<LineBreak/>
 		</TextBlock>
 	</Grid>
 </Window>

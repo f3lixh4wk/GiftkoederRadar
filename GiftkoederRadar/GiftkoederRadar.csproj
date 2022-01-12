@@ -4,12 +4,13 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>giftkoederRadarIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="giftkoederRadarIcon.png" />
     <None Remove="icons8-about-24.png" />
     <None Remove="icons8-expand-64.png" />
-    <None Remove="icons8-info-250.png" />
     <None Remove="icons8-left-100.png" />
     <None Remove="icons8-minus-100.png" />
     <None Remove="icons8-plus-+-100.png" />
@@ -28,9 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="giftkoederRadarIcon.png" />
     <Resource Include="icons8-about-24.png" />
     <Resource Include="icons8-expand-64.png" />
-    <Resource Include="icons8-info-250.png" />
     <Resource Include="icons8-left-100.png" />
     <Resource Include="icons8-minus-100.png" />
     <Resource Include="icons8-plus-+-100.png" />
