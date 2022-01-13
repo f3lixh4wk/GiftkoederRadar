@@ -20,15 +20,9 @@ using GMap.NET.WindowsPresentation;
 
 namespace GiftkoederRadar
 {
-	// TODO:
-	// Vektor 2D Grafik
-
-	// Weitere machbare Ideen: 
-	// Datum und Uhrzeit der Giftköder Erstellung als Tooltip am Marker oder im Dialog mit dem Titel und der Beschreibung
-
 	// Weitere Ideen nach Abgabe:
 	// Versenden der Giftködermeldung als Email
-	// Anbindung an die Internetseite
+	// Anbindung an die Internetseite https://www.giftkoeder-radar.com/
 
 	/// <summary>
 	/// Interaktionslogik für MapView.xaml
@@ -182,11 +176,14 @@ namespace GiftkoederRadar
 			foreach (ReportItem reportItem in reportItems)
 			{
 				PointLatLng position = getPositionFromItem(reportItem);
+				string tooltip = createMarkerToolTipFromItem(reportItem);
+
 				GMapMarker marker = new GMapMarker(position);
 				marker.Shape = new Image
 				{
 					Width = 30,
 					Height = 30,
+					ToolTip = tooltip,
 					Source = new BitmapImage(new Uri("/icons8-warning-25.png", UriKind.Relative))
 				};
 				mapView.Markers.Add(marker);
@@ -240,6 +237,11 @@ namespace GiftkoederRadar
 			mapView.Zoom = 15;
 		}
 
+		private void lboxReportList_LostFocus(object sender, RoutedEventArgs e)
+		{
+			lboxReportList.UnselectAll();
+		}
+
 		private GeoCoderStatusCode setMapPositionByKeywords(string keywords)
 		{
 			return mapView.SetPositionByKeywords(keywords);
@@ -254,6 +256,17 @@ namespace GiftkoederRadar
 				return mapView.GetPositionByKeywords(keywords);
 			}
 			return mapView.GetPositionByKeywords(report.PostCode);
+		}
+
+		private string createMarkerToolTipFromItem(ReportItem reportItem)
+		{
+			string tooltip = "";
+			Report report = reports.First(x => x.ReportId == reportItem.ItemId);
+			tooltip = report.BaitTitle + "\n" +
+				"Datum: " + report.CreatedDate.ToString("dd.MM.yyyy") + "\n" +
+				"PLZ: " + report.PostCode + "\n" +
+				"Land: " + report.Country;
+			return tooltip;
 		}
 
 		private string getElementById(int id, string elementName)

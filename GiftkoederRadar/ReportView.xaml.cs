@@ -184,6 +184,7 @@ namespace GiftkoederRadar
 					report.BaitTitle = tboxBaitTitle.Text;
 					report.Description = tboxDescription.Text;
 					report.SketchFilePath = File.Exists(sketchFilePath) ? sketchFilePath : "";
+					report.CreatedDate = DateTime.Now;
 					
 					//1.6. Ausnahmen (try, catch, throw)
 					try

@@ -75,7 +75,9 @@
 			<!--2.2.10. ListBox-->
 			<!--2.3.6.ListBox, ItemTemplate-Attribut-->
 			<gmaps:GMapControl x:Name="mapView" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Loaded="mapViewLoaded"/>
-			<ListBox x:Name="lboxReportList" Grid.Row="1" ItemTemplate="{StaticResource listItemTemplate}" SelectionChanged="lboxReportList_SelectionChanged"/>
+			<ListBox x:Name="lboxReportList" Grid.Row="1" ItemTemplate="{StaticResource listItemTemplate}" 
+						SelectionChanged="lboxReportList_SelectionChanged" LostFocus="lboxReportList_LostFocus"
+						SelectionMode="Single"/>
 		</Grid>
 	</DockPanel>
 </Page>

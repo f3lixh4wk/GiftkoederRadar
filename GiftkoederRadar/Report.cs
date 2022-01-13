@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -219,6 +220,19 @@ namespace GiftkoederRadar
 			}
 		}
 
+		public DateTime CreatedDate
+		{
+			get { return createdDate; }
+			set
+			{
+				if (value.Equals(createdDate))
+					return;
+
+				createdDate = value;
+				OnPropertyChanged("CreatedDate");
+			}
+		}
+
 		//1.5. Felder
 		private int reportId;
 		private string country;
@@ -232,6 +246,7 @@ namespace GiftkoederRadar
 		private Brush townForegroundColor;
 		private Brush streetForegroundColor;
 		private Brush baitTitleForegroundColor;
+		private DateTime createdDate;
 	}
 
 	public class Countries : ObservableCollection<string>
