@@ -47,18 +47,21 @@ namespace GiftkoederRadar
 			Button btn = (Button)sender;
 			if (btn == btnBack)
 			{
+				currentSelectedItem = null;
 				MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 				mainWindow.SetActiveView(View.StartView);
 				mainWindow.ChangeView(new StartView());
 			}
 			else if (btn == btnAdd)
 			{
+				currentSelectedItem = null;
 				MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 				mainWindow.SetActiveView(View.ReportView);
 				mainWindow.ChangeView(new ReportView(View.MapView));
 			}
 			else if (btn == btnSearchInMap)
 			{
+				currentSelectedItem = null;
 				string location = tboxSearch.Text;
 				if (location.Length == 0 || location == initialSearch)
 					return;
@@ -79,7 +82,7 @@ namespace GiftkoederRadar
 			else if (btn == btnRemove)
 			{
 				List<ReportItem> reportItems = (List<ReportItem>)lboxReportList.ItemsSource;
-				ReportItem reportItem = (ReportItem)lboxReportList.SelectedItem;
+				ReportItem reportItem = currentSelectedItem;
 				if (reportItem == null)
 					return;
 
@@ -94,9 +97,11 @@ namespace GiftkoederRadar
 
 				mapView.SetPositionByKeywords(standardLocation);
 				mapView.Zoom = 12;
+				currentSelectedItem = null;
 			}
 			else if(btn == btnExpandMap)
 			{
+				currentSelectedItem = null;
 				mapView.SetPositionByKeywords(standardLocation);
 				mapView.Zoom = 12;
 			}
@@ -104,6 +109,7 @@ namespace GiftkoederRadar
 
 		private void textbox_leave(object sender, EventArgs e)
 		{
+			currentSelectedItem = null;
 			if (tboxSearch.Text.Length == 0)
 			{
 				tboxSearch.Text = initialSearch;
@@ -113,6 +119,7 @@ namespace GiftkoederRadar
 
 		private void textbox_enter(object sender, EventArgs e)
 		{
+			currentSelectedItem = null;
 			if (tboxSearch.Text == initialSearch)
 			{
 				tboxSearch.Text = "";
@@ -235,6 +242,7 @@ namespace GiftkoederRadar
 				return;
 			}
 			mapView.Zoom = 15;
+			currentSelectedItem = reportItem;
 		}
 
 		private void lboxReportList_LostFocus(object sender, RoutedEventArgs e)
@@ -288,6 +296,11 @@ namespace GiftkoederRadar
 		private bool showProgressDialog = false;
 		private string standardLocation = "Göttingen, Germany";
 		private string initialSearch = "PLZ, Ort";
+
+		// Nicht so schön, aber so kann ich die zuletzt selektierte Meldung
+		// mit btnRemove entfernen und erreichen, dass beim LostFocusEvent der
+		// lboxReportList auch das selektierte Item seinen Fokus verliert.
+		private ReportItem currentSelectedItem;
 	}
 
 	public class ReportItem

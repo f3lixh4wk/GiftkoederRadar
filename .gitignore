@@ -2,3 +2,4 @@
 .vs/GiftkoederRadar/DesignTimeBuild
 *.suo
 *.cache
+/GiftkoederRadar/bin/Debug/net5.0-windows
